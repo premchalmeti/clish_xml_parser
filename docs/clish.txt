@@ -1,0 +1,24 @@
+
+network show
+
+network device add <name> <ip>
+network device delete <name>
+
+method is optional
+
+pattern can be regex
+
+<PTYPE name="typename" method="integer" pattern="start..end" help=""></PTYPE>
+<PTYPE name="typename" method="select" pattern="option1(val1) option2(val2)" help=""></PTYPE>
+<PTYPE name="IP_ADDR"
+    pattern="(((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))"
+        help="IP address AAA.BBB.CCC.DDD where each part is in the range 0-255"/>
+
+<COMMAND name="" help="">
+    <PARAM name="param_name" type="typename">
+    <ACTION>${param_name}</ACTION>
+</COMMAND>
+
+
+http://clish.sourceforge.net/
+http://clish.sourceforge.net/clish-0.7.3/

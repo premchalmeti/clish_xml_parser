@@ -1,0 +1,46 @@
+
+.json file:
+schema files contains safe commands definitions
+
+cmdtree: contains cmdnode
+cmdnode: each cmdnode has cmd and associated metadata
+leaf_node: a leaf node doesnt contain any child nodes and has meta data associated
+
+schema_parser/mgr:
+parse schema files and prepares cmdtree
+
+
+xml_parser/mgr:
+2 responsibilities:
+traverse cmdtree
+parse xml
+
+reads source xml for cmdtree
+iterate over cmdtree and remove the nodes
+
+
+cmd meta:
+{
+    "safe": true
+    ...
+}
+
+cmd node:
+{
+    "cmd": "network device add", 
+    "meta": {
+        "safe": true,
+        ...
+    }
+}
+
+
+complete cmd: "network device add" 
+cmd_tokens: ["network", "device", "add"]
+pure_cmd: "device add"
+
+CmdNode
+    xml_obj
+
+CmdTree
+    xml_tree_obj

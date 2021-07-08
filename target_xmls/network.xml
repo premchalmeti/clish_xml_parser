@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<CLISH_MODULE xmlns="http://clish.sourceforge.net/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://clish.sourceforge.net/XMLSchema                      http://clish.sourceforge.net/XMLSchema/clish.xsd">
+
+       <VIEW name="network" prompt="Network&gt;">
+
+              
+              <PTYPE name="STRING" pattern="[^\-]+" help="String" />
+              <PTYPE name="IP_ADDR" pattern="(((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))" help="IP address AAA.BBB.CCC.DDD where each part is in the range 0-255" />
+
+              
+
+              <COMMAND name="show" help="Show currently added devices">
+                     <ACTION>network show</ACTION>
+              </COMMAND>
+
+              
+
+              <COMMAND name="device" help="Device related commands" />
+
+              
+
+              <COMMAND name="device modify">
+              </COMMAND>
+
+              
+
+              <COMMAND name="device modify rename">
+                     <PARAM name="old_name" ptype="STRING" help="Current name of the device" />
+                     <PARAM name="new_name" ptype="STRING" help="New name of the device" />
+                     <ACTION>network device rename ${device_name} ${device_name}</ACTION>
+              </COMMAND>
+       </VIEW>
+</CLISH_MODULE>
