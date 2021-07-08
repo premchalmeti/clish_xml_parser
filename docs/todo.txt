@@ -1,0 +1,6 @@
+for blog,
+
+- refactoring with better names
+- clean/stdized coding
+- comments/docstrings
+- error handled
