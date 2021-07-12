@@ -8,31 +8,31 @@
             {
                 "cmd": "network show",
                 "meta": {
-                    "safe": true
+                    "safe": false
                 }
             },
             {
-                "cmd": "network device add", 
+                "cmd": "network device add",
                 "meta": {
                     "safe": false
                 }
             },
             {
-                "cmd": "network device delete", 
+                "cmd": "network device list",
                 "meta": {
                     "safe": false
                 }
             },
             {
-                "cmd": "network device modify reconfigure",
+                "cmd": "network device configure rename",
                 "meta": {
                     "safe": false
                 }
             },
             {
-                "cmd": "network device modify rename",
+                "cmd": "network device configure ip",
                 "meta": {
-                    "safe": true
+                    "safe": false
                 }
             }
         ]

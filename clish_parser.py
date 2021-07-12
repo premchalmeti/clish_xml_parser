@@ -6,11 +6,11 @@
 from xml_parser import XMLParser
 
 
-class CmdTreeManager(XMLParser):
+class CLISHParser(XMLParser):
     """
-    CmdTreeManager takes a CmdTree which contains all the details of a CLISH 
+    CLISHParser takes a CmdTree which contains all the details of a CLISH 
     XML. 
-    CmdTreeManager traverse the CmdTree and inherits XmlParser to parse the
+    CLISHParser traverse the CmdTree and inherits XMLParser to parse the
     given Clish xml.
 
     """
@@ -22,10 +22,7 @@ class CmdTreeManager(XMLParser):
         if node.visible:
             return
 
-        xml_cmd_node = self.get_cmd_node_from_view_node(node.pure_cmd)
-
-        if xml_cmd_node is not None:
-            self.view_node.remove(xml_cmd_node)
+        self.remove_cmd(node.cmd)
 
     def process_node(self, node):
         if not node.is_leaf_node:
@@ -34,15 +31,19 @@ class CmdTreeManager(XMLParser):
                 self.process_node(child)
 
             node.visible = any([child.visible for child in node.childs])
-        
+
         # the root node doesnt exist in xml
         if node is self.cmd_tree.root:
             return
 
         self.action_node(node)
 
-    def process_cmd_tree(self):
+    def parse_cmd_tree(self):
         self.process_node(self.cmd_tree.root)
+
+    def output_xml(self):
+        if self.cmd_tree.root.visible:
+            super().output_xml()
 
 
 if __name__ == '__main__':
@@ -52,6 +53,6 @@ if __name__ == '__main__':
     schema_mgr = SchemaManager(config.SCHEMA_FILE)
     cmd_tree = schema_mgr.prepare_cmd_tree()
 
-    xmlm = CmdTreeManager(cmd_tree)
-    xmlm.process_cmd_tree()
-    xmlm.generate_target_xml()
+    cp = CLISHParser(cmd_tree)
+    cp.parse_cmd_tree()
+    cp.output_xml()

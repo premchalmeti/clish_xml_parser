@@ -1,0 +1,115 @@
+* Topic:
+
+- A complex algo made easy with slightly modified generalized tree?
+- How a tree data structure made our problem a piece of cake?
+- How we solved a complex use case with generalized trees?
+
+
+replacable words:
+developer=>
+we will be covering CLISH in later topics
+
+terminology:
+
+CLI instead of CLISH
+
+network menu => in context of CLI
+network xml => in context of parsing / CLISH
+
+admin network menu
+admin xml | admin modules
+user xml | safe xmls | safe cli xmls
+
+
+TL;DR; 
+
+
+*Intro:
+
+If you are a developer, you must have come across a work where you had to use data structure and algorithm.
+Under the hood most of your softwares are algorithms and data structures. You might not realize this, but that's how softwares works.
+
+I stumbled upon an interesting algorithm's work while working on an hyperconverged infrastructure which had a network of storage clusters.
+The CLISH (pronounce: see-lish) framework is used to provide a CLI interface to these clusters. More on CLISH here [http://clish.sourceforge.net/]
+
+You can define arbitary menus (network, clock, firewall, etc) and commands (network device add, network device delete, etc) using the XML files.
+
+Problem:
+I was working on a feature set to expose a safe CLI where users can execute read-only commands.
+
+Lets take an example CLISH and see how the parsing works. Following is a sample network.xml file.
+
+
+
+The safe command's definition is given inside a json schema file which looks like this.
+
+
+Solution:
+I had to design a parsing framework which does the following jobs
+
+- Read the command schema file
+- Prepare a CmdTree definition for the current CLISH module
+- Read the source CLISH XML
+- Traverse the CmdTree definition and eliminate the nodes in the XML file
+- Output the safe XML file further to be used by CLISH framework
+
+The schema file is a json represenation of the list of CLISH commands and its meta data. The excerpt looks like,
+
+{
+    ...
+    "module": {
+        ...
+        "source_file": "network.xml",
+        "commands": [
+            {
+                "cmd": "network show",
+                "meta": {
+                    "safe": true
+                }
+            },
+            {
+                "cmd": "network device add", 
+                "meta": {
+                    "safe": false
+                }
+            }
+            ...
+        ]
+    }
+}
+
+<schema file excerpt img/github gist here>
+
+
+We can not directly use these commands since the xml contains the commands in hierarchical way so we have to arrange it in a way to represent the command tokens in hierarchical manner.
+
+This is where the generalized trees comes into picture.
+
+
+                network
+                /      \
+             show     device
+                    /   |     \   
+                 add   delete  reconfigure
+                                /     \
+                            rename    ip
+
+
+* Generalized tree:
+
+- commonly used terminology
+- implementation
+
+
+the tree representation for the above module will look like,
+
+<cmd_tree img here>
+
+The clish parser uses the following algorithm for parsing,
+
+1. Read the source xml (source_file)
+2. Traverse the cmdtree node and action
+2.1 if the cmdnode is a leaf node and is not visible then remove it from xml
+2.2 if the cmdnode is not a leaf node then process all the child nodes first
+2.3 if all the child cmds are removed then remove the parent cmd itself
+

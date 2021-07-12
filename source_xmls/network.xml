@@ -4,62 +4,49 @@
               xsi:schemaLocation="http://clish.sourceforge.net/XMLSchema
                      http://clish.sourceforge.net/XMLSchema/clish.xsd">
 
-       <VIEW name="network" prompt="Network&gt;">
+       <COMMAND name="network show"
+              help="Show currently added devices">
+              <ACTION>network show</ACTION>
+       </COMMAND>
 
-              <!--=======================================================-->
-              <PTYPE name="STRING"
-                     pattern="[^\-]+"
-                     help="String"/>
-              <PTYPE name="IP_ADDR"
-                     pattern="(((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))"
-                            help="IP address AAA.BBB.CCC.DDD where each part is in the range 0-255"/>
+       <!--=======================================================-->
 
-              <!--=======================================================-->
+       <COMMAND name="network device"
+              help="Device related commands"></COMMAND>
 
-              <COMMAND name="show"
-                     help="Show currently added devices">
-                     <ACTION>network show</ACTION>
-              </COMMAND>
+       <!--=======================================================-->
 
-              <!--=======================================================-->
+       <COMMAND name="network device add">
+              <PARAM name="device_name" ptype="STRING" help="Name of the device"></PARAM>
+              <PARAM name="device_ip" ptype="IP_ADDR" help="IP of the device"></PARAM>
+              <ACTION>network device add ${device_name} ${ip_addr}</ACTION>
+       </COMMAND>
 
-              <COMMAND name="device"
-                     help="Device related commands"></COMMAND>
+       <!--=======================================================-->
 
-              <!--=======================================================-->
+       <COMMAND name="network device list">
+              <ACTION>network device list</ACTION>
+       </COMMAND>
 
-              <COMMAND name="device add">
-                     <PARAM name="device_name" ptype="STRING" help="Name of the device"></PARAM>
-                     <PARAM name="device_ip" ptype="IP_ADDR" help="IP of the device"></PARAM>
-                     <ACTION>network device add ${device_name} ${ip_addr}</ACTION>
-              </COMMAND>
+       <!--=======================================================-->    
 
-              <!--=======================================================-->
+       <COMMAND name="network device configure">
+       </COMMAND>
 
-              <COMMAND name="device delete">
-                     <PARAM name="device_name" ptype="STRING" help="Name of the device"></PARAM>
-                     <ACTION>network device delete ${device_name}</ACTION>
-              </COMMAND>
+       <!--=======================================================-->
 
-              <!--=======================================================-->    
+       <COMMAND name="network device configure ip">
+              <PARAM name="device_name" ptype="STRING" help="Name of the device"></PARAM>
+              <PARAM name="device_ip" ptype="IP_ADDR" help="IP of the device"></PARAM>
+              <ACTION>network device configure ip ${device_name} ${ip_addr}</ACTION>
+       </COMMAND>
 
-              <COMMAND name="device modify">
-              </COMMAND>
+       <!--=======================================================-->
 
-              <!--=======================================================-->
+       <COMMAND name="network device configure rename">
+              <PARAM name="old_name" ptype="STRING" help="Current name of the device"></PARAM>
+              <PARAM name="new_name" ptype="STRING" help="New name of the device"></PARAM>
+              <ACTION>network device rename ${old_name} ${new_name}</ACTION>
+       </COMMAND>
 
-              <COMMAND name="device modify reconfigure">
-                     <PARAM name="device_name" ptype="STRING" help="Name of the device"></PARAM>
-                     <PARAM name="device_ip" ptype="IP_ADDR" help="IP of the device"></PARAM>
-                     <ACTION>network device modify reconfigure ${device_name} ${ip_addr}</ACTION>
-              </COMMAND>
-
-              <!--=======================================================-->
-
-              <COMMAND name="device modify rename">
-                     <PARAM name="old_name" ptype="STRING" help="Current name of the device"></PARAM>
-                     <PARAM name="new_name" ptype="STRING" help="New name of the device"></PARAM>
-                     <ACTION>network device rename ${device_name} ${device_name}</ACTION>
-              </COMMAND>
-       </VIEW>
 </CLISH_MODULE>

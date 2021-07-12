@@ -13,4 +13,4 @@ OUTPUT_XML_DIR = 'target_xmls'
 
 # schema file to be used by schema manager to prepare cmd tree
 SCHEMA_DIR = 'schema'
-SCHEMA_FILE = os.path.join(SCHEMA_DIR, 'network.json')
+SCHEMA_FILE = os.path.join(SCHEMA_DIR, 'network_schema.json')

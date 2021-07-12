@@ -13,28 +13,19 @@ XML_BASE_SCHEMA = "http://clish.sourceforge.net/XMLSchema"
 
 class XMLParser:
     """
-    The XmlParser contains all the utility functions related to parsing the
+    The XMLParser contains all the utility functions related to parsing the
     CLISH XML
     """
 
     def __init__(self, xml):
-        self.xml_root = self.load_xml(xml)
-        self.view_node = self.load_view_node()
+        self.xml_tree = self.load_xml(xml)
+        self.xml_root = self.xml_tree.getroot()
 
     def load_xml(self, xml):
         return ET.parse(xml)
 
-    def load_view_node(self):
-        matched_nodes = self.xml_root.findall(
-            './/{%s}VIEW' % XML_BASE_SCHEMA
-        )
-        if len(matched_nodes) == 0:
-            raise Exception(f"No matching VIEW tag found")
-
-        return matched_nodes[0]
-
-    def get_cmd_node_from_view_node(self, cmd):
-        cmd_nodes = self.view_node.findall(
+    def get_cmd_node(self, cmd):
+        cmd_nodes = self.xml_root.findall(
             ".//{%s}COMMAND[@name='%s']" % (
                 XML_BASE_SCHEMA, cmd
             )
@@ -48,11 +39,20 @@ class XMLParser:
 
         return xml_cmd_node
 
-    def generate_target_xml(self):
+    def remove_cmd(self, cmd):
+        xml_cmd_node = self.get_cmd_node(cmd)
+
+        if xml_cmd_node is not None:
+            self.xml_root.remove(xml_cmd_node)
+            return True
+
+        return False
+
+    def output_xml(self):
         ET.register_namespace('', XML_BASE_SCHEMA)
 
         file = os.path.basename(self.cmd_tree.clish_xml_path)
-        self.xml_root.write(
+        self.xml_tree.write(
             os.path.join(config.OUTPUT_XML_DIR, file),
             encoding='utf-8',
             xml_declaration=True

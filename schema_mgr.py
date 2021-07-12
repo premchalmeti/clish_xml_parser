@@ -48,7 +48,8 @@ if __name__ == '__main__':
     schema_mgr = SchemaManager(config.SCHEMA_FILE)
     cmd_tree = schema_mgr.prepare_cmd_tree()
 
-    from cmd_tree_mgr import CmdTreeManager
+    from clish_parser import CLISHParser
 
-    xmlm = CmdTreeManager(cmd_tree)
-    xmlm.process_cmd_tree()
+    cp = CLISHParser(cmd_tree)
+    cp.parse_cmd_tree()
+    cp.output_xml()

@@ -15,19 +15,19 @@ class CmdNode:
     The cmd_node representation for "network device add" command will be,
             -----------------------
             |  network (root)     |
-            |  pure_cmd: ""       |
+            |  cmd: network       |
             |  cmd_token: network |
             -----------------------
                       |
             -----------------------
             |  device             |
-            |  pure_cmd: "device" |
+            |cmd: "network device"|
             |  cmd_token: device  |
             -----------------------
                      |
             ---------------------------
             |  add                    |
-            |  pure_cmd: "device add" |
+            |cmd: "network device add"|
             |  cmd_token: add         |
             |    meta: {              |
             |    'safe': <bool>       |
@@ -35,17 +35,16 @@ class CmdNode:
             |    }                    |
             ---------------------------
 
-    complete cmd: "network device add"
+    cmd: "network device add" A command is used for lookup in the CLISH XML.
     cmd_tokens: ["network", "device", "add"]
-    pure_cmd: A pure command is used for lookup in the CLISH XML.
 
     """
-    def __init__(self, cmd_token, pure_cmd):
+    def __init__(self, cmd_token, parent_cmd=""):
         self.cmd_token = cmd_token
         self.is_leaf_node = False
         self.meta = {}
         self.childs = []
-        self.pure_cmd = pure_cmd
+        self.cmd = f'{parent_cmd} {cmd_token}' if parent_cmd else cmd_token
 
         # non-leaf nodes computed based on child nodes visibility
         self.__visible = True
@@ -65,9 +64,8 @@ class CmdNode:
         if self.is_child_exists(cmd_token):
             return
 
-        pure_cmd = f'{self.pure_cmd} {cmd_token}' if self.pure_cmd else cmd_token
-
-        node = CmdNode(cmd_token, pure_cmd)
+        # pure_cmd = f'{self.pure_cmd} {cmd_token}' if self.pure_cmd else cmd_token
+        node = CmdNode(cmd_token, self.cmd)
         self.childs.append(node)
         return node
 
@@ -93,19 +91,19 @@ class CmdTree:
     This tree is a collection of CmdNodes having `root` as starting point.
             -----------------------
             |  network (root)     |
-            |  pure_cmd: ""       |
+            |  cmd: network       |
             |  cmd_token: network |
             -----------------------
                       |
             -----------------------
             |  device             |
-            |  pure_cmd: "device" |
+            |cmd: "network device"|
             |  cmd_token: device  |
             -----------------------
                      |
             ---------------------------
             |  add                    |
-            |  pure_cmd: "device add" |
+            |cmd: "network device add"|
             |  cmd_token: add         |
             |    meta: {              |
             |    'safe': <bool>       |
@@ -121,7 +119,7 @@ class CmdTree:
         )
 
     def set_root(self, token):
-        self.root = CmdNode(token, '')
+        self.root = CmdNode(token)
 
     def append_cmd_node(self, parent, child):
         if not self.root:
@@ -139,7 +137,6 @@ class CmdTree:
         for i in range(N-1):
             cur_node = self.append_cmd_node(parent=tokens[i], child=tokens[i+1])
 
-        cur_node.complete_cmd = cmd
         cur_node.meta = meta
         cur_node.is_leaf_node = True
 
