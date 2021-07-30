@@ -19,10 +19,8 @@ class CLISHParser(XMLParser):
         self.cmd_tree = cmd_tree
 
     def action_node(self, node):
-        if node.visible:
-            return
-
-        self.remove_cmd(node.cmd)
+        if not node.visible:
+            self.remove_cmd(node.cmd)
 
     def process_node(self, node):
         if not node.is_leaf_node:

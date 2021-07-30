@@ -1,0 +1,7 @@
+
+Topic: Parsing made easy using generalized trees
+
+Topic: How we solved a complex xml parsing use case using a slightly modified generalized tree DS?
+
+Did you solve any DS/Algo problem in your work? I think this is one of the most asked interview kinda question
+
